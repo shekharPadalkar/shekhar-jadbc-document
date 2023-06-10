@@ -1,0 +1,58 @@
+package JdbcExample;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class CrudExampleEx {
+
+	public static void main(String[] args) throws Exception {
+		int insertResult=0; 
+		int updateResult=0;
+		boolean createResult=false;
+		
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adjava","root","shekhar@123");
+		
+		String createQuery = "create table Employee(id int,name varchar(255),salary varchar(30))";
+		
+		String insertQuery = "insert into Employee(id, name, salary) values (1, 'Shekhar', '50000')";
+		
+		String retriveQuery = "select * from Employee";
+		
+		String updateQuery = "update Employee set name = 'Saurabh' ";
+		
+		String deleteQuery = "delete from  Employee where id=3";
+		
+		Statement st = con.createStatement();
+		System.out.println("creating table of Employee");
+//		boolean createResult = st.execute(createQuery);
+//		
+		if(!createResult) {
+			System.out.println("Employee table is created successfully");
+			System.out.println("inserting record");
+			insertResult = st.executeUpdate(insertQuery);
+		}
+		
+		if(insertResult>0) {
+			System.out.println("record inserted successfully");
+			ResultSet rs = st.executeQuery(retriveQuery);
+			while(rs.next()) {
+				System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getString(3));
+			}
+		}
+		
+		if(insertResult>0) {
+			st.executeUpdate(updateQuery);
+			System.out.println("record updated successfully");
+		}
+		
+		if(insertResult>0) {
+			updateResult = st.executeUpdate(deleteQuery);
+			System.out.println("record deleted successfully");
+		}
+		
+
+	}
+
+}
